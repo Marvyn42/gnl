@@ -6,7 +6,7 @@
 /*   By: mamaquig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 16:55:35 by mamaquig          #+#    #+#             */
-/*   Updated: 2019/11/19 04:55:33 by mamaquig         ###   ########.fr       */
+/*   Updated: 2019/11/19 05:22:08 by mamaquig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,36 +84,33 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 int				get_next_line(int fd, char **line)
 {
-	int i = 0;
 	int			byte_read;
 	int test;
 	char	*tmp;
 	char	*buff2;
+	char *bufftest;
 
 	buff2 = ft_strdup("");
+	bufftest = ft_strdup("");
 	test = BUFFER_SIZE;
 	if (fd < 1)
 		return (-1);
 	read(fd, buff2, test);
 	while (!(tmp = ft_strchr(buff2, '\n')) || !(tmp = ft_strchr(buff2, '\0')))
 	{
-		printf("tour dans la boucle: %d\n", i);
-		i++;
 		test += test;
 		printf("test = %d\n", test);
 		printf("buff2 avant read: %s\n", buff2);
-		byte_read = read(fd, buff2, 100);
+		byte_read = read(fd, bufftest, test);
+		//ft_strjoin(s1, s2);
 		printf("buff2 apres read: %s\n\n", buff2);
+		printf("bufftest apres read: %s\n\n", bufftest);
 	}
 	tmp = ft_strchr(buff2, '\n');
+	tmp = ft_strchr(buff2, '\0');
 	/*------------------------------------------------------------------------*/
 	if (*tmp == '\0')
 	{
-		//if (!(line = malloc(sizeof(char) * ft_strlen(buff2))))
-		//	return (-1);
-		//printf("malloc fait\n");
-		//ft_memcpy(line, buff2, ft_strlen(buff2));
-		//printf("line apres memccpy et malloc: %s\n", *line);
 		printf("buff2 avant substr: %s\n", buff2);
 		if (!(*line = ft_substr(buff2, 0, ft_strlen(buff2))))
 			return (-1);
