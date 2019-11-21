@@ -6,11 +6,24 @@
 /*   By: mamaquig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 16:55:58 by mamaquig          #+#    #+#             */
-/*   Updated: 2019/11/19 03:38:38 by mamaquig         ###   ########.fr       */
+/*   Updated: 2019/11/21 01:22:35 by mamaquig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t           ft_strnlen(const char *s, size_t maxlen)
+{
+        const char *str;
+
+        str = s;
+        while (*str && maxlen != 0)
+        {
+                str++;
+                maxlen--;
+        }
+        return (str - s);
+}
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -48,19 +61,6 @@ size_t		ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
-}
-
-size_t		ft_strnlen(const char *s, size_t maxlen)
-{
-	const char *str;
-
-	str = s;
-	while (*str && maxlen != 0)
-	{
-		str++;
-		maxlen--;
-	}
-	return (str - s);
 }
 
 size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize)

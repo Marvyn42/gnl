@@ -6,27 +6,12 @@
 /*   By: mamaquig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 16:55:35 by mamaquig          #+#    #+#             */
-/*   Updated: 2019/11/19 05:22:08 by mamaquig         ###   ########.fr       */
+/*   Updated: 2019/11/21 03:47:32 by mamaquig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
-
-void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
-{
-	size_t			i;
-
-	i = 0;
-	while (i < n)
-	{
-		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
-		if (((unsigned char *)src)[i] == (unsigned char)c)
-			return (dst + i + 1);
-		i++;
-	}
-	return (NULL);
-}
 
 char	*ft_strdup(const char *s1)
 {
@@ -84,46 +69,31 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 int				get_next_line(int fd, char **line)
 {
-	int			byte_read;
-	int test;
-	char	*tmp;
-	char	*buff2;
-	char *bufftest;
+	char 		*test;
+	char		*tmp;
+	static char *str;
+	int			nb;
 
-	buff2 = ft_strdup("");
-	bufftest = ft_strdup("");
-	test = BUFFER_SIZE;
+	str = calloc(sizeof(char), BUFFER_SIZE);
+	tmp = calloc(sizeof(char), BUFFER_SIZE);
+	nb = 1;
 	if (fd < 1)
 		return (-1);
-	read(fd, buff2, test);
-	while (!(tmp = ft_strchr(buff2, '\n')) || !(tmp = ft_strchr(buff2, '\0')))
+	while (!(ft_strchr(tmp, '\n')))
 	{
-		test += test;
-		printf("test = %d\n", test);
-		printf("buff2 avant read: %s\n", buff2);
-		byte_read = read(fd, bufftest, test);
-		//ft_strjoin(s1, s2);
-		printf("buff2 apres read: %s\n\n", buff2);
-		printf("bufftest apres read: %s\n\n", bufftest);
+		read(fd, tmp, BUFFER_SIZE);
+		printf("tmp = %s\n", tmp);
+		str = ft_strjoin(str, tmp);
+		printf("str = %s\n\n", str);
 	}
-	tmp = ft_strchr(buff2, '\n');
-	tmp = ft_strchr(buff2, '\0');
-	/*------------------------------------------------------------------------*/
-	if (*tmp == '\0')
+		test = ft_strchr(str, '\n');
+	if (test == NULL)
 	{
-		printf("buff2 avant substr: %s\n", buff2);
-		if (!(*line = ft_substr(buff2, 0, ft_strlen(buff2))))
-			return (-1);
-		printf("line apres substr: %s\n", *line);
-		return (puts("0"));
+		test = ft_strchr(str, '\0');
+		nb = 0;
 	}
-	else
-	{
-		*tmp = '\0';
-		if (!(*line = ft_substr(buff2, 0, ft_strlen(buff2))))
-			return (-1);
-		printf("line apres substr: %s\n", *line);
-		return (puts("1"));
-	}
-	/*------------------------------------------------------------------------*/
+	if (!(*line = ft_substr(str, 0, ft_strlen(str) - ft_strlen(test))))
+		return (-1);
+	printf("line = %s\n", *line);
+	return (printf("%d\n", nb));
 }
