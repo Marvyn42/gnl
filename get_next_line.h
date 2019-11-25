@@ -6,7 +6,7 @@
 /*   By: mamaquig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 16:50:57 by mamaquig          #+#    #+#             */
-/*   Updated: 2019/11/19 03:37:58 by mamaquig         ###   ########.fr       */
+/*   Updated: 2019/11/25 16:49:07 by mamaquig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+char		*ft_strdup(const char *s1);
 char		*ft_strchr(const char *s, int c);
 void		*ft_memcpy(void *dst, const void *src, size_t n);
 size_t		ft_strlen(const char *s);

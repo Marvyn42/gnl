@@ -6,36 +6,23 @@
 /*   By: mamaquig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 16:55:58 by mamaquig          #+#    #+#             */
-/*   Updated: 2019/11/25 16:25:33 by mamaquig         ###   ########.fr       */
+/*   Updated: 2019/11/25 16:46:14 by mamaquig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t           ft_strnlen(const char *s, size_t maxlen)
+size_t		ft_strnlen(const char *s, size_t maxlen)
 {
-        const char *str;
+	const char *str;
 
-        str = s;
-        while (*str && maxlen != 0)
-        {
-                str++;
-                maxlen--;
-        }
-        return (str - s);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	while (*s != '\0')
+	str = s;
+	while (*str && maxlen != 0)
 	{
-		if (*s == c)
-			return ((char *)s);
-		s++;
+		str++;
+		maxlen--;
 	}
-	if (*s == '\0' && c == '\0')
-		return ((char *)s);
-	return (0);
+	return (str - s);
 }
 
 void		*ft_memcpy(void *dst, const void *src, size_t n)
