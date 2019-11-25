@@ -6,23 +6,23 @@
 /*   By: mamaquig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 16:55:58 by mamaquig          #+#    #+#             */
-/*   Updated: 2019/11/25 16:46:14 by mamaquig         ###   ########.fr       */
+/*   Updated: 2019/11/25 17:58:58 by mamaquig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t		ft_strnlen(const char *s, size_t maxlen)
+char		*ft_strchr(const char *s, int c)
 {
-	const char *str;
-
-	str = s;
-	while (*str && maxlen != 0)
+	while (*s != '\0')
 	{
-		str++;
-		maxlen--;
+		if (*s == c)
+			return ((char *)s);
+		s++;
 	}
-	return (str - s);
+	if (*s == '\0' && c == '\0')
+		return ((char *)s);
+	return (0);
 }
 
 void		*ft_memcpy(void *dst, const void *src, size_t n)
@@ -50,43 +50,30 @@ size_t		ft_strlen(const char *s)
 	return (i);
 }
 
-size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize)
+char		*ft_strdup(const char *s1)
 {
-	size_t srcsize;
-	size_t len;
+	int		s;
+	char	*dest;
 
-	if (!dst || !src)
-		return (0);
-	srcsize = ft_strlen(src);
-	if (dstsize == 0)
-		len = 0;
-	else if (srcsize >= dstsize)
-		len = dstsize - 1;
-	else
-		len = srcsize;
-	if (dstsize != 0)
-	{
-		ft_memcpy(dst, src, len);
-		dst[len] = '\0';
-	}
-	return (srcsize);
+	s = ft_strlen(s1);
+	if (!(dest = malloc(sizeof(char) * s + 1)))
+		return (NULL);
+	dest = ft_memcpy(dest, s1, s);
+	dest[s] = '\0';
+	return (dest);
 }
 
-size_t		ft_strlcat(char *dst, const char *src, size_t dstsize)
+char		*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t srclen;
-	size_t dstlen;
+	char	*dst;
+	size_t	tot;
 
-	dstlen = ft_strnlen(dst, dstsize);
-	srclen = ft_strlen(src);
-	if (dstlen == dstsize)
-		return (dstsize + srclen);
-	if (srclen < dstsize - dstlen)
-		ft_memcpy(dst + dstlen, src, srclen + 1);
-	else
-	{
-		ft_memcpy(dst + dstlen, src, (dstsize - dstlen) - 1);
-		dst[dstsize - 1] = '\0';
-	}
-	return (dstlen + srclen);
+	if (!s1 || !s2)
+		return (NULL);
+	tot = ft_strlen(s1) + ft_strlen(s2) + 1;
+	if (!(dst = malloc(sizeof(char) * tot)))
+		return (NULL);
+	ft_memcpy(dst, s1, ft_strlen(s1) + 1);
+	ft_memcpy(dst + ft_strlen(s1), s2, ft_strlen(s2) + 1);
+	return (dst);
 }
