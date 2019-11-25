@@ -6,7 +6,7 @@
 /*   By: mamaquig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 16:55:35 by mamaquig          #+#    #+#             */
-/*   Updated: 2019/11/21 03:47:32 by mamaquig         ###   ########.fr       */
+/*   Updated: 2019/11/25 16:25:31 by mamaquig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,29 +71,35 @@ int				get_next_line(int fd, char **line)
 {
 	char 		*test;
 	char		*tmp;
-	static char *str;
+	static char *str = NULL;
 	int			nb;
 
-	str = calloc(sizeof(char), BUFFER_SIZE);
+	if (!str)
+		str = ft_strdup("");
+	//str = calloc(sizeof(char), BUFFER_SIZE);
 	tmp = calloc(sizeof(char), BUFFER_SIZE);
-	nb = 1;
 	if (fd < 1)
 		return (-1);
-	while (!(ft_strchr(tmp, '\n')))
+	while (!(ft_strchr(str, '\n')) && str && (nb = read(fd, tmp, BUFFER_SIZE)) > 0)
 	{
-		read(fd, tmp, BUFFER_SIZE);
-		printf("tmp = %s\n", tmp);
+		tmp[nb] = '\0';
+		//printf("tmp = %s\n", tmp);
 		str = ft_strjoin(str, tmp);
-		printf("str = %s\n\n", str);
+		//printf("str (in loop) = %s\n\n", str);
 	}
-		test = ft_strchr(str, '\n');
-	if (test == NULL)
+	free(tmp);
+	if ((test = ft_strchr(str, '\n')) == NULL)
 	{
 		test = ft_strchr(str, '\0');
 		nb = 0;
 	}
+	else
+		nb = 1;
 	if (!(*line = ft_substr(str, 0, ft_strlen(str) - ft_strlen(test))))
 		return (-1);
+	//printf("str (before sub) = %s\n", str);
+	str = ft_substr(test + 1, 0, ft_strlen(test + 1));
+	//printf("str = %s\n", str);
 	printf("line = %s\n", *line);
-	return (printf("%d\n", nb));
+	return (nb);
 }
