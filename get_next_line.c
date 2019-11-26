@@ -6,12 +6,11 @@
 /*   By: mamaquig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 16:55:35 by mamaquig          #+#    #+#             */
-/*   Updated: 2019/11/25 18:14:39 by mamaquig         ###   ########.fr       */
+/*   Updated: 2019/11/26 14:01:33 by mamaquig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -29,22 +28,25 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 int		get_next_line(int fd, char **line)
 {
 	char		*test;
-	char		*tmp;
+	char		*tmp = NULL;
 	static char *str = NULL;
 	int			nb;
 
 	if (!str)
 		str = ft_strdup("");
-	//test = *str;
-	tmp = calloc(sizeof(char), BUFFER_SIZE);
+	if (!tmp)
+		tmp = calloc(sizeof(char), BUFFER_SIZE);
 	if (fd < 1)
 		return (-1);
 	while (!(ft_strchr(str, '\n')) && (nb = read(fd, tmp, BUFFER_SIZE)) > 0)
 	{
 		tmp[nb] = '\0';
+		test = str;
 		str = ft_strjoin(str, tmp);
+		free(test);
 	}
-	free(tmp);
+	//free(tmp);
+	tmp = NULL;
 	if (!(test = ft_strchr(str, '\n')))
 	{
 		test = ft_strchr(str, '\0');
@@ -53,8 +55,17 @@ int		get_next_line(int fd, char **line)
 	else
 		nb = 1;
 	if (!(*line = ft_substr(str, 0, ft_strlen(str) - ft_strlen(test))))
+	{
+		free(str);
 		return (-1);
-	str = ft_substr(test + 1, 0, ft_strlen(test + 1));
-	printf("line = %s\n", *line);
+	}
+	if (nb == 1)
+	{
+		tmp = str;
+		str = ft_substr(test + 1, 0, ft_strlen(test + 1));
+		free(tmp);
+	}
+	/*else
+		free(str);*/
 	return (nb);
 }
