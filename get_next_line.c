@@ -6,7 +6,7 @@
 /*   By: mamaquig <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 16:55:35 by mamaquig          #+#    #+#             */
-/*   Updated: 2019/11/26 14:01:33 by mamaquig         ###   ########.fr       */
+/*   Updated: 2019/11/26 16:03:04 by mamaquig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,53 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (str);
 }
 
+void	tofree(char ***str)
+{
+	free(**str);
+	**str = NULL;
+}
+
+int		get_next_part(char ***line, char **str, char **tmp, int nb)
+{
+	char *test;
+
+	if (!(test = ft_strchr(*str, '\n')))
+	{
+		test = ft_strchr(*str, '\0');
+		nb = 0;
+	}
+	else
+		nb = 1;
+	if (!(**line = ft_substr(*str, 0, ft_strlen(*str) - ft_strlen(test))))
+	{
+		free(*str);
+		*str = NULL;
+		return (-1);
+	}
+	if (nb == 1)
+	{
+		*tmp = *str;
+		*str = ft_substr(test + 1, 0, ft_strlen(test + 1));
+		free(*tmp);
+	}
+	else
+		tofree(&str);
+	return (nb);
+}
+
 int		get_next_line(int fd, char **line)
 {
 	char		*test;
-	char		*tmp = NULL;
+	char		*tmp;
 	static char *str = NULL;
 	int			nb;
 
+	tmp = NULL;
 	if (!str)
 		str = ft_strdup("");
 	if (!tmp)
-		tmp = calloc(sizeof(char), BUFFER_SIZE);
-	if (fd < 1)
+		tmp = calloc(sizeof(char), BUFFER_SIZE + 1);
+	if (fd < 0 || !line || read(fd, tmp, 0) == -1)
 		return (-1);
 	while (!(ft_strchr(str, '\n')) && (nb = read(fd, tmp, BUFFER_SIZE)) > 0)
 	{
@@ -45,27 +80,8 @@ int		get_next_line(int fd, char **line)
 		str = ft_strjoin(str, tmp);
 		free(test);
 	}
-	//free(tmp);
+	free(tmp);
 	tmp = NULL;
-	if (!(test = ft_strchr(str, '\n')))
-	{
-		test = ft_strchr(str, '\0');
-		nb = 0;
-	}
-	else
-		nb = 1;
-	if (!(*line = ft_substr(str, 0, ft_strlen(str) - ft_strlen(test))))
-	{
-		free(str);
-		return (-1);
-	}
-	if (nb == 1)
-	{
-		tmp = str;
-		str = ft_substr(test + 1, 0, ft_strlen(test + 1));
-		free(tmp);
-	}
-	/*else
-		free(str);*/
+	nb = get_next_part(&line, &str, &tmp, nb);
 	return (nb);
 }
